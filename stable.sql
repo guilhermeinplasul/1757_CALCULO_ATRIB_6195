@@ -22,6 +22,7 @@ DECLARE
     v_classe         NUMBER;
     v_unidade        VARCHAR2(5);
     v_etapa          NUMBER;
+    v_grupo          VARCHAR(50);
     
 BEGIN
 
@@ -57,6 +58,14 @@ BEGIN
            estclasse
     WHERE  estitem.empresa = estclasse.empresa
            AND estitem.classe_produto = estclasse.codigo
+           AND estitem.empresa = v_empresa
+           AND estitem.codigo = v_produto;
+           
+    -- Grupo Produto
+    SELECT Nvl(Max(estitem.grupo), '0')
+    INTO   v_grupo
+    FROM   estitem
+    WHERE  estitem.empresa = 1
            AND estitem.empresa = v_empresa
            AND estitem.codigo = v_produto;
 
@@ -255,6 +264,12 @@ BEGIN
         WHEN ( v_cliente_matriz = 177 ) THEN
           v_retorno := '100'; -- CAPRICHO
           
+        WHEN ( v_cliente_matriz = 7325 AND v_grupo = 10 ) THEN
+            v_retorno := '92'; --VIBRA AG / 92 = FILME (10)
+            
+        WHEN ( v_cliente_matriz = 7325 AND v_grupo = 20 ) THEN
+            v_retorno := '91'; --VIBRA AG / 91 = SACO (20)
+          
         ELSE
           v_retorno := '8'; -- padrao do corte e solda
           
@@ -381,6 +396,12 @@ BEGIN
             
           WHEN ( v_cliente_matriz = 177 ) THEN
             v_retorno := '100'; -- CAPRICHO
+            
+          WHEN ( v_cliente_matriz = 7325 AND v_grupo = 10 ) THEN
+            v_retorno := '92'; --VIBRA AG / 92 = FILME (10)
+            
+          WHEN ( v_cliente_matriz = 7325 AND v_grupo = 20 ) THEN
+            v_retorno := '91'; --VIBRA AG / 91 = SACO (20)
             
           ELSE -- padrao refiladeira
             v_retorno := '7';
